@@ -1,0 +1,82 @@
+---
+title: "Activity 3"
+author: "Aeron Jesse Edombingo"
+date: "2024-02-06"
+output: pdf_document
+---
+
+```{r }
+# Install and load required packages
+install.packages("rvest")
+install.packages("httr")
+install.packages("polite")
+```
+
+```{r}
+
+library(rvest)
+library(httr)
+library(polite)
+```
+
+```{r}
+# Set up polite scraper
+polite::use_manners(save_as = 'polite_scrape.R')
+```
+
+```{r}
+# Define the URL template
+jprurl_template <- 'https://www.imdb.com/title/tt0107290/reviews/_ajax?ref_=undefined&paginationKey=%s'
+```
+
+```{r}
+# Initialize vectors
+jprUsernames <- character(0)
+jprReviewerDates <- character(0)
+jprReviewerContents <- character(0)
+jprRatings <- character(0)
+```
+
+```{r}
+# Scrape data from multiple pages
+reviews_to_scrape <- 300
+pagination_key <- ""
+for (page in 1:ceiling(reviews_to_scrape / 25)) {
+  session <- bow(sprintf(jprurl_template, pagination_key), user_agent = "Educational")
+  
+  # Scrape data
+  jprUsernames <- c(jprUsernames, scrape(session) %>% html_nodes('span.display-name-link') %>% html_text())
+  jprReviewerDates <- c(jprReviewerDates, scrape(session) %>% html_nodes('span.review-date') %>% html_text())
+  jprReviewerContents <- c(jprReviewerContents, scrape(session) %>% html_nodes('div.text.show-more__control') %>% html_text())
+  jprRatings <- c(jprRatings, scrape(session) %>% html_nodes('span.rating-other-user-rating') %>% html_text())
+  
+  # Extract pagination key for the next page
+  pagination_key <- scrape(session) %>% html_nodes("div.load-more-data") %>% html_attr("data-key")
+  
+  # Check if we have reached the desired number of reviews
+  if (length(jprUsernames) >= reviews_to_scrape) {
+    break
+  }
+}
+```
+
+```{r}
+# Create a data frame
+jprDataFrame <- data.frame(
+  jprUsernames = jprUsernames[1:300],
+  jprReviewer_Date = jprReviewerDates[1:300],
+  jprReviewer_Content = jprReviewerContents[1:300],
+  jprRating = jprRatings[1:300]
+)
+```
+
+```{r}
+# Save as CSV
+write.csv(jprDataFrame, file = "JurassicPark_reviews.csv", row.names = FALSE)
+```
+
+```{r}
+# Print the data frame
+print(jprDataFrame)
+
+```
