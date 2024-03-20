@@ -1,2 +1,0 @@
-"0","# Set up polite scraper"
-"0","polite::use_manners(save_as = 'polite_scrape.R')"
