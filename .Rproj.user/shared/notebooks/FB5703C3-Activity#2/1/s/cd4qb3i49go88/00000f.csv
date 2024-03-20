@@ -1,2 +1,0 @@
-"0","# Define the URL template"
-"0","url_template <- 'https://www.imdb.com/title/tt0816692/reviews/_ajax?ref_=undefined&paginationKey=%s'"

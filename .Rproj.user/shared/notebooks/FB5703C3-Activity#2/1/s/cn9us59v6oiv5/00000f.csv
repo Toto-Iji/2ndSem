@@ -1,7 +1,0 @@
-"0","# Create a data frame"
-"0","DataFrame <- data.frame("
-"0","  Usernames = Usernames[1:300],"
-"0","  Reviewer_Date = ReviewerDates[1:300],"
-"0","  Reviewer_Content = ReviewerContents[1:300],"
-"0","  Rating = Ratings[1:300]"
-"0",")"

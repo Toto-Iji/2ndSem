@@ -1,5 +1,0 @@
-"0","# Initialize vectors"
-"0","Usernames <- character(0)"
-"0","ReviewerDates <- character(0)"
-"0","ReviewerContents <- character(0)"
-"0","Ratings <- character(0)"
